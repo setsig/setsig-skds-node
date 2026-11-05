@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { SetsigError, AuthenticationError, InsufficientCreditsError, RateLimitError, ReplayAttackError, GeofenceOutOfBoundsError, } from "./errors.js";
+import { SetsigError, AuthenticationError, InsufficientCreditsError, PaywallBlockedError, CrossBorderCreditRequiredError, PaywallTierRequiredError, AttestationFailedError, VisualProofRequiredError, StaleVisualProofError, InvalidImageHashError, RateLimitError, ReplayAttackError, GeofenceOutOfBoundsError, } from "./errors.js";
 export class HttpClient {
     apiKey;
     baseURL;
@@ -48,6 +48,27 @@ export class HttpClient {
                 const errorData = (await response.json().catch(() => ({})));
                 const message = errorData.message || `HTTP ${response.status} ${response.statusText}`;
                 const code = errorData.error_code || "ERR_API_ERROR";
+                if (code === "ERR_PAYWALL_BLOCKED") {
+                    throw new PaywallBlockedError(message, errorData.details);
+                }
+                if (code === "ERR_CROSS_BORDER_CREDIT_REQUIRED") {
+                    throw new CrossBorderCreditRequiredError(message, errorData.details);
+                }
+                if (code === "ERR_PAYWALL_TIER_REQUIRED") {
+                    throw new PaywallTierRequiredError(message, errorData.details);
+                }
+                if (code === "ERR_ATTESTATION_FAILED") {
+                    throw new AttestationFailedError(message, errorData.details);
+                }
+                if (code === "ERR_VISUAL_PROOF_REQUIRED") {
+                    throw new VisualProofRequiredError(message, errorData.details);
+                }
+                if (code === "ERR_STALE_VISUAL_PROOF") {
+                    throw new StaleVisualProofError(message, errorData.details);
+                }
+                if (code === "ERR_INVALID_IMAGE_HASH") {
+                    throw new InvalidImageHashError(message, errorData.details);
+                }
                 switch (response.status) {
                     case 401:
                         throw new AuthenticationError(message, errorData.details);

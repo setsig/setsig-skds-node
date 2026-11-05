@@ -27,6 +27,60 @@ export class InsufficientCreditsError extends SetsigError {
         this.name = "InsufficientCreditsError";
     }
 }
+export class PaywallBlockedError extends SetsigError {
+    paywallUrl;
+    currentBalance;
+    requiredMinTopup;
+    constructor(message = "Verification services locked due to zero or depleted prepaid balance", details) {
+        super(message, "ERR_PAYWALL_BLOCKED", 402, details);
+        this.name = "PaywallBlockedError";
+        if (details && typeof details === "object") {
+            const d = details;
+            if (typeof d.paywall_url === "string")
+                this.paywallUrl = d.paywall_url;
+            if (typeof d.current_balance === "number")
+                this.currentBalance = d.current_balance;
+            if (typeof d.required_min_topup === "number")
+                this.requiredMinTopup = d.required_min_topup;
+        }
+    }
+}
+export class CrossBorderCreditRequiredError extends SetsigError {
+    constructor(message = "Cross-border venue verification requires local currency credit or FX conversion", details) {
+        super(message, "ERR_CROSS_BORDER_CREDIT_REQUIRED", 402, details);
+        this.name = "CrossBorderCreditRequiredError";
+    }
+}
+export class PaywallTierRequiredError extends SetsigError {
+    constructor(message = "Feature requires a higher subscription tier level", details) {
+        super(message, "ERR_PAYWALL_TIER_REQUIRED", 403, details);
+        this.name = "PaywallTierRequiredError";
+    }
+}
+export class AttestationFailedError extends SetsigError {
+    constructor(message = "Hardware attestation failed: untrusted enclave or rooted device", details) {
+        super(message, "ERR_ATTESTATION_FAILED", 403, details);
+        this.name = "AttestationFailedError";
+    }
+}
+export class VisualProofRequiredError extends SetsigError {
+    constructor(message = "Venue policy strictly requires visual photo proof of presence", details) {
+        super(message, "ERR_VISUAL_PROOF_REQUIRED", 422, details);
+        this.name = "VisualProofRequiredError";
+    }
+}
+export class StaleVisualProofError extends SetsigError {
+    constructor(message = "Visual proof photo expired: must be taken within 10 seconds of scanning", details) {
+        super(message, "ERR_STALE_VISUAL_PROOF", 400, details);
+        this.name = "StaleVisualProofError";
+    }
+}
+export class InvalidImageHashError extends SetsigError {
+    constructor(message = "Visual proof SHA-256 hash mismatch: photo integrity compromised", details) {
+        super(message, "ERR_INVALID_IMAGE_HASH", 400, details);
+        this.name = "InvalidImageHashError";
+    }
+}
 export class RateLimitError extends SetsigError {
     constructor(message = "Rate limit exceeded. Please throttle requests.", details) {
         super(message, "ERR_RATE_LIMIT_EXCEEDED", 429, details);
