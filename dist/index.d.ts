@@ -3,6 +3,7 @@ import { SessionsResource } from "./resources/sessions.js";
 import { VenuesResource } from "./resources/venues.js";
 import { BillingResource } from "./resources/billing.js";
 import { WebhooksResource } from "./resources/webhooks.js";
+import { TerminalsResource } from "./resources/terminals.js";
 import type { SetsigClientOptions } from "./types.js";
 export declare class SetsigClient {
     readonly tokens: TokensResource;
@@ -10,6 +11,7 @@ export declare class SetsigClient {
     readonly venues: VenuesResource;
     readonly billing: BillingResource;
     readonly webhooks: WebhooksResource;
+    readonly terminals: TerminalsResource;
     private readonly http;
     constructor(options: SetsigClientOptions);
 }

@@ -4,12 +4,14 @@ import { SessionsResource } from "./resources/sessions.js";
 import { VenuesResource } from "./resources/venues.js";
 import { BillingResource } from "./resources/billing.js";
 import { WebhooksResource } from "./resources/webhooks.js";
+import { TerminalsResource } from "./resources/terminals.js";
 export class SetsigClient {
     tokens;
     sessions;
     venues;
     billing;
     webhooks;
+    terminals;
     http;
     constructor(options) {
         if (!options.apiKey) {
@@ -29,6 +31,7 @@ export class SetsigClient {
         this.venues = new VenuesResource(this.http);
         this.billing = new BillingResource(this.http);
         this.webhooks = new WebhooksResource(options.secretKey);
+        this.terminals = new TerminalsResource(this.http);
     }
 }
 // Re-export types, crypto utilities, and domain errors

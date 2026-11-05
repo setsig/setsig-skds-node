@@ -101,6 +101,7 @@ export interface VenueSettings {
 export interface CreateVenueInput {
     name: string;
     externalReference?: string;
+    referenceId?: string;
     coordinates: VenueCoordinates;
     hardwareProfile: HardwareProfile;
     hardwareConfig?: Record<string, unknown>;
@@ -108,6 +109,17 @@ export interface CreateVenueInput {
     requireVisualProof?: boolean;
     visualProofPrompt?: string;
     countryCode?: string;
+}
+export interface TerminalSessionInput {
+    terminalKey: string;
+    venueId: string;
+}
+export interface TerminalSessionResponse {
+    status: string;
+    terminalSessionToken: string;
+    venueName: string;
+    totpIntervalSeconds: number;
+    scope: string;
 }
 export interface Venue {
     id: string;

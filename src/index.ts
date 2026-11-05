@@ -4,6 +4,7 @@ import { SessionsResource } from "./resources/sessions.js";
 import { VenuesResource } from "./resources/venues.js";
 import { BillingResource } from "./resources/billing.js";
 import { WebhooksResource } from "./resources/webhooks.js";
+import { TerminalsResource } from "./resources/terminals.js";
 import type { SetsigClientOptions } from "./types.js";
 
 export class SetsigClient {
@@ -12,6 +13,7 @@ export class SetsigClient {
   public readonly venues: VenuesResource;
   public readonly billing: BillingResource;
   public readonly webhooks: WebhooksResource;
+  public readonly terminals: TerminalsResource;
 
   private readonly http: HttpClient;
 
@@ -36,6 +38,7 @@ export class SetsigClient {
     this.venues = new VenuesResource(this.http);
     this.billing = new BillingResource(this.http);
     this.webhooks = new WebhooksResource(options.secretKey);
+    this.terminals = new TerminalsResource(this.http);
   }
 }
 
