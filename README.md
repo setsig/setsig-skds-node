@@ -54,8 +54,8 @@ Kullanıcının taradığı dinamik QR'ı, GPS telemetrisini, donanım kanıtın
 const result = await setsig.sessions.verify({
   qrPayload: scannedPayload,
   clientBinding: {
-    clientToken: "TKT_BILETIX_894102",
-    userRef: "usr_mertcan_avci",
+    clientToken: "TKT_VENUE_PASS_894102",
+    userRef: "usr_demo_operator_01",
   },
   telemetry: {
     latitude: 40.990234,

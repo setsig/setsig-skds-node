@@ -30,30 +30,28 @@ export function verifyWebhookSignature(
     }
   }
 
-  // Fallback: raw hex signature if header format is pure hex
-  if (!timestampStr && !signatureHex && parts.length === 1 && signatureHeader.length === 64) {
-    signatureHex = signatureHeader;
+  if (!timestampStr || !signatureHex) {
+    throw new InvalidSignatureError("Signature format invalid (expected t=...,v1=...)");
   }
 
-  if (!signatureHex) {
-    throw new InvalidSignatureError("Signature format invalid (expected v1=...)");
-  }
-
-  // Timestamp freshness validation (if timestamp was included in header)
-  if (timestampStr) {
-    const timestamp = parseInt(timestampStr, 10);
-    const now = Math.floor(Date.now() / 1000);
-    if (isNaN(timestamp) || Math.abs(now - timestamp) > toleranceSeconds) {
-      throw new InvalidSignatureError(`Webhook timestamp outside tolerance (${toleranceSeconds}s)`);
-    }
+  // Timestamp freshness validation (replay window protection)
+  const timestamp = parseInt(timestampStr, 10);
+  const now = Math.floor(Date.now() / 1000);
+  if (isNaN(timestamp) || Math.abs(now - timestamp) > toleranceSeconds) {
+    throw new InvalidSignatureError(`Webhook timestamp outside tolerance (${toleranceSeconds}s)`);
   }
 
   const payloadBuffer = Buffer.isBuffer(rawPayload)
     ? rawPayload
     : Buffer.from(rawPayload, "utf-8");
 
+  const signedPayload = Buffer.concat([
+    Buffer.from(`t=${timestampStr}.`, "utf-8"),
+    payloadBuffer,
+  ]);
+
   const computedHmac = createHmac("sha256", secretKey)
-    .update(payloadBuffer)
+    .update(signedPayload)
     .digest("hex");
 
   const expectedBuffer = Buffer.from(signatureHex, "utf-8");

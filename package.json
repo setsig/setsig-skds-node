@@ -24,7 +24,7 @@
     "paas",
     "security"
   ],
-  "author": "AVCI Ventures & Kurucu Bireysel IP",
+  "author": "setsig.com",
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^22.13.4",
