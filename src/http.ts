@@ -46,6 +46,7 @@ export class HttpClient {
 
     const headers: Record<string, string> = {
       "Authorization": `Bearer ${this.apiKey}`,
+      "X-Setsig-Client": "sdk-node/1.0.0",
       "Accept": "application/json",
       "User-Agent": "setsig-node-sdk/1.0.0",
       ...customHeaders,
